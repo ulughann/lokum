@@ -1,0 +1,89 @@
+is_enumerable := fn(x) {
+  dön is_array(x) || is_map(x) || is_immutable_array(x) || is_immutable_map(x)
+}
+
+is_array_like := fn(x) {
+  dön is_array(x) || is_immutable_array(x)
+}
+
+paylaş {
+  all: fn(x, fn) {
+    if !is_enumerable(x) { dön undefined }
+    for k, v in x {
+      if !fn(k, v) { dön yanlış }
+    }
+    dön doğru
+  },
+  any: fn(x, fn) {
+    if !is_enumerable(x) { dön undefined }
+    for k, v in x {
+      if fn(k, v) { dön doğru }
+    }
+    dön yanlış
+  },
+
+  chunk: fn(x, size) {
+    if !is_array_like(x) || !size { dön undefined }
+    numElements := len(x)
+    if !numElements { dön [] }
+    res := []
+    idx := 0
+    for idx < numElements {
+      res = append(res, x[idx:idx+size])
+      idx += size
+    }
+    dön res
+  },
+  at: fn(x, key) {
+    if !is_enumerable(x) { dön undefined }
+    if is_array_like(x) {
+        if !is_int(key) { dön undefined }
+    } else {
+        if !is_string(key) { dön undefined }
+    }
+    dön x[key]
+  },
+  
+  each: fn(x, fn) {
+    if !is_enumerable(x) { dön undefined }
+    for k, v in x {
+      fn(k, v)
+    }
+  },
+  
+  filter: fn(x, fn) {
+    if !is_array_like(x) { dön undefined }
+    dst := []
+    for k, v in x {
+      if fn(k, v) { dst = append(dst, v) }
+    }
+    dön dst
+  },
+  
+  find: fn(x, fn) {
+    if !is_enumerable(x) { dön undefined }
+    for k, v in x {
+      if fn(k, v) { dön v }
+    }
+  },
+  
+  find_key: fn(x, fn) {
+    if !is_enumerable(x) { dön undefined }
+    for k, v in x {
+      if fn(k, v) { dön k }
+    }
+  },
+  
+  map: fn(x, fn) {
+    if !is_enumerable(x) { dön undefined }
+    dst := []
+    for k, v in x {
+      dst = append(dst, fn(k, v))
+    }
+    dön dst
+  },
+  
+  key: fn(k, _) { dön k },
+  
+  value: fn(_, v) { dön v }
+}

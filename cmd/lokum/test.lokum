@@ -1,0 +1,5 @@
+yazdır("sa")
+
+eğer 1 < 4 {
+  yazdır("1 küçüktür 4'ten")
+}
